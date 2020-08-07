@@ -26,7 +26,7 @@ class Player:
                 lines.append(s)
             return lines
 
-
+    
     # Move player to new room based on input
     def move_player(self, target_dir):
         try:
@@ -42,3 +42,50 @@ class Player:
         # Player moves wrong way error
         except WrongWay as error:
             print('Invalid direction!')
+
+    def add_items(self, list_of_items):
+        for item in list_of_items:
+            item.on_take()
+            self.items[item.id] = item
+
+    def remove_items(self, item_id_list):
+        # Keep object type as list
+        if type(item_id_list) != list:
+            raise TypeError("Needs to be a list!")
+
+        # Check if id's are in the room's dict
+        if any([id in self.items for id in item_id_list]):
+            # Results of trying to remove items
+            status = []
+            removed_items = []
+
+            for id in item_id_list:
+                try:
+                    # Delete key
+                    item = self.items.pop(id)
+
+                    item.on_drop()
+                    removed_items.append(item)
+                    # The item will be deleted and read True
+                    status.append(True)
+                except KeyError as ke:
+                    # If it's is not found, it will read False
+                    status.append(False)
+
+            # Items from list removed from dict
+            removed_item_ids = [
+                item for item, removed in zip(item_id_list, status) if removed
+            ]
+
+            return (removed_item_ids, removed_items)
+        else:
+            return ([], [])
+
+    def __repr__(self):
+        return self.__dict__
+
+    def __str__(self):
+        s = ""
+        l = ["{}:{}".format(key, value) for key, value in self.__dict__.items()]
+        s = "\n".join(l)
+        return s
