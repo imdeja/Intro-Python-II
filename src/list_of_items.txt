@@ -1,0 +1,2 @@
+{'id':'mastersword', 'name':'Master Sword', 'description':'Said that no one with an evil heart can even wield the blade.'}
+{'id':'map', 'name':'Map', 'description':'Could be useful on your adventure'}
